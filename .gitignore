@@ -1,0 +1,38 @@
+# ---- model weights (never push multi-GB binaries) ----
+*.gguf
+*.bin
+*.safetensors
+models/
+weights/
+
+# ---- local scan output / working notes ----
+*.nmap
+*.gnmap
+*.xml
+*.txt
+loot/
+scans/
+engagement/
+
+# ---- python / virtualenvs ----
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# ---- secrets / local config ----
+.env
+.env.*
+*.key
+*.pem
+
+# ---- OS / editor cruft ----
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Keep the example config tracked even though *.toml-style secrets may
+# live elsewhere; the committed config contains no secrets.
+!configs/openinterpreter-config.toml

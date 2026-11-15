@@ -1,0 +1,30 @@
+# Open Interpreter configuration for the local hack-assistant model.
+# Copied to ~/.openinterpreter/config.toml by install.sh.
+#
+# Docs: https://docs.openinterpreter.com/settings/all-settings
+# Open Interpreter talks to Ollama via its OpenAI-compatible endpoint.
+
+[model]
+# LiteLLM routes "ollama/<name>" to a local Ollama server.
+model = "ollama/hack-assistant"
+api_base = "http://localhost:11434"
+context_window = 16384
+max_tokens = 4096
+temperature = 0.2
+
+[interpreter]
+# Keep the human in the loop: confirm before running any code.
+# Do NOT set this to true unless you fully trust the sandbox.
+auto_run = false
+
+# System message steering the agent toward authorized lab work.
+system_message = """
+You are a local, offline security-study agent for authorized CTF,
+reverse-engineering and vulnerability-analysis work on systems the
+operator owns or is permitted to test. Explain each command before
+proposing to run it. Keep all activity inside the consented lab scope.
+"""
+
+# Prefer shell + python for tooling (nmap parsing, gdb, pwntools, etc.)
+[interpreter.computer]
+import_computer_api = true
