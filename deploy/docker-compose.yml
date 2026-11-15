@@ -14,7 +14,7 @@ services:
       dockerfile: deploy/railway/Dockerfile
     environment:
       - PORT=11434
-      - BASE_MODEL=hf.co/bartowski/WhiteRabbitNeo-7B-v1.5a-GGUF:Q4_K_M
+      - BASE_MODEL=huihui_ai/qwen3-abliterated:8b-v2
     volumes:
       - ollama:/root/.ollama
     # GPU (NVIDIA + nvidia-container-toolkit):

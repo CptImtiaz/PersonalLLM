@@ -16,7 +16,7 @@ export OLLAMA_HOST="[::]:${PORT}"
 # Client/healthcheck talk over loopback by name.
 CLIENT="localhost:${PORT}"
 
-MODEL="${BASE_MODEL:-hf.co/bartowski/WhiteRabbitNeo-7B-v1.5a-GGUF:Q4_K_M}"
+MODEL="${BASE_MODEL:-huihui_ai/qwen3-abliterated:8b-v2}"
 ALIAS="hack-assistant"
 
 echo "[*] Starting ollama serve on ${OLLAMA_HOST} ..."

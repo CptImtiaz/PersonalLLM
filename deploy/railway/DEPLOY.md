@@ -18,9 +18,10 @@ It's two Railway services in one project:
 └─────────────────┘
 ```
 
-> ⚠️ **Model reality on Railway:** Railway has **no GPU**. Only the **7B**
-> model is practical here (CPU, a few tokens/sec). The 27B — even Q2_K —
-> will be unusably slow or OOM. Keep 27B for a local GPU. Guide below uses 7B.
+> ⚠️ **Model reality on Railway:** Railway has **no GPU**. Only an **8B-class**
+> model is practical here (CPU, a few tokens/sec). The 27B — even Q2_K — will
+> be unusably slow or OOM. Keep 27B for a local GPU. Guide below uses the 8B
+> abliterated Qwen3 (`huihui_ai/qwen3-abliterated:8b-v2`).
 >
 > Authorized lab / CTF use only. Put the chat UI behind a login (Open WebUI
 > has one) and don't share the public URL.
@@ -48,8 +49,8 @@ It's two Railway services in one project:
    need to touch Build settings.
 3. **Settings → Variables**:
    - `PORT` = `11434`   (fixes the internal port so the UI can find it)
-   - `BASE_MODEL` = `hf.co/bartowski/WhiteRabbitNeo-7B-v1.5a-GGUF:Q4_K_M`
-     (or any 7B GGUF tag you prefer)
+   - `BASE_MODEL` = `huihui_ai/qwen3-abliterated:8b-v2`
+     (uncensored 8B Qwen3; ships its own template)
 4. **Settings → Volumes** → add volume, mount path `/root/.ollama`, size ≥ 8 GB.
 5. **Do NOT** generate a public domain for this service — keep it private.
 6. Deploy. First boot downloads the model (~4.5 GB) — watch **Deploy Logs**

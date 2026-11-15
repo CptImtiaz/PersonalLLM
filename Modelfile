@@ -12,20 +12,10 @@ PARAMETER num_ctx 16384
 # Low temperature for precise, deterministic technical reasoning.
 PARAMETER temperature 0.2
 
-# WhiteRabbitNeo-7B-v1.5a is LLaMA-2-based and this GGUF ships NO embedded
-# chat template, so define the Llama-2 [INST] format explicitly — otherwise
-# Ollama can't format the conversation and replies come out broken.
-# NOTE: if you switch BASE_MODEL to a Qwen / ChatML model (e.g. the newer
-# WhiteRabbitNeo-2.5-Qwen), replace this whole TEMPLATE block with ChatML.
-TEMPLATE """[INST] {{ if .System }}<<SYS>>
-{{ .System }}
-<</SYS>>
-
-{{ end }}{{ .Prompt }} [/INST] {{ .Response }}"""
-PARAMETER stop "[INST]"
-PARAMETER stop "[/INST]"
-PARAMETER stop "<<SYS>>"
-PARAMETER stop "<</SYS>>"
+# No TEMPLATE here on purpose. The base models below are proper Ollama
+# packages (huihui_ai abliterated Qwen3) that ship their own correct ChatML
+# template, so the alias inherits it automatically. Only add a TEMPLATE block
+# if you point FROM at a RAW .gguf that has no embedded chat template.
 
 SYSTEM """
 You are a local offensive-security study assistant running on the

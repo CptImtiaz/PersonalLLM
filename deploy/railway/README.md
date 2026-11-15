@@ -1,8 +1,8 @@
-# Railway deployment (7B, CPU-only)
+# Railway deployment (8B, CPU-only)
 
 Deploys Ollama to Railway and auto-builds the `hack-assistant` alias from
-the 7B model. **Railway has no GPU**, so inference runs on CPU at a few
-tokens/second. The 13B/27B tiers are not practical here — use a GPU host
+the 8B model. **Railway has no GPU**, so inference runs on CPU at a few
+tokens/second. The larger tiers are not practical here — use a GPU host
 for those, or keep inference local and deploy only a UI (see below).
 
 > Authorized lab / CTF use only. Deploying an uncensored model to a public
@@ -12,7 +12,7 @@ for those, or keep inference local and deploy only a UI (see below).
 ## What gets deployed
 
 - **Service `ollama`** — this repo, built from `deploy/railway/Dockerfile`.
-  On first boot it pulls `WhiteRabbitNeo-7B` and creates `hack-assistant`.
+  On first boot it pulls `huihui_ai/qwen3-abliterated:8b-v2` and creates `hack-assistant`.
 - **Volume** at `/root/.ollama` — persists the model so redeploys don't
   re-download ~4.5 GB.
 

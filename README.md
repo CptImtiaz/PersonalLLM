@@ -35,11 +35,15 @@ front-end. No data leaves your box.
 
 ## Hardware / VRAM requirements
 
-| Tier   | VRAM / unified mem | System RAM | Model pulled (auto)                                             |
-|--------|--------------------|------------|-----------------------------------------------------------------|
-| High   | ≥ 16 GB            | ≥ 32 GB    | `hf.co/jsantillana/Qwen3.8-27B-abliterated-GGUF:Q4_K_M`          |
-| Medium | 10 – 15 GB         | ≥ 16 GB    | `hf.co/jmainformatique/WhiteRabbitNeo-13B-v1-Q4_K_M-GGUF:Q4_K_M` |
-| Low    | < 10 GB            | ≥ 8 GB     | `hf.co/bartowski/WhiteRabbitNeo-7B-v1.5a-GGUF:Q4_K_M`            |
+| Tier   | VRAM / unified mem | System RAM | Model pulled (auto)                    |
+|--------|--------------------|------------|-----------------------------------------|
+| High   | ≥ 16 GB            | ≥ 32 GB    | `huihui_ai/Qwen3.8-abliterated` (27B)   |
+| Medium | 10 – 15 GB         | ≥ 16 GB    | `huihui_ai/qwen3-abliterated:14b`       |
+| Low    | < 10 GB            | ≥ 8 GB     | `huihui_ai/qwen3-abliterated:8b-v2`     |
+
+All tiers are **huihui_ai abliterated (uncensored) Qwen3** models — proper
+Ollama packages that ship their own ChatML template (so no format issues).
+The 8B tier is also what the Railway deploy uses.
 
 `install.sh` detects your GPU (NVIDIA via `nvidia-smi`, or Apple Silicon
 unified memory) and RAM, then picks the tier for you. Apple Silicon budgets

@@ -32,9 +32,12 @@ MODELFILE="${SCRIPT_DIR}/Modelfile"
 ALIAS="hack-assistant"
 
 # ---------- model tiers ----------
-MODEL_HIGH="hf.co/jsantillana/Qwen3.8-27B-abliterated-GGUF:Q4_K_M"
-MODEL_MED="hf.co/jmainformatique/WhiteRabbitNeo-13B-v1-Q4_K_M-GGUF:Q4_K_M"
-MODEL_LOW="hf.co/bartowski/WhiteRabbitNeo-7B-v1.5a-GGUF:Q4_K_M"
+# All huihui_ai abliterated (uncensored) Qwen3 models — proper Ollama
+# packages that ship their own ChatML template (no template fiddling needed).
+# Verify/adjust tags at: https://ollama.com/huihui_ai/qwen3-abliterated/tags
+MODEL_HIGH="huihui_ai/Qwen3.8-abliterated"          # 27B, needs >=16GB VRAM
+MODEL_MED="huihui_ai/qwen3-abliterated:14b"          # 14B
+MODEL_LOW="huihui_ai/qwen3-abliterated:8b-v2"        # 8B (also the Railway tier)
 
 # ---------- 1. detect hardware ----------
 OS="$(uname -s)"
