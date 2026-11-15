@@ -1,0 +1,43 @@
+# Local test of the full stack (chat UI + model) before deploying to Railway.
+# Mirrors the two Railway services on your own machine.
+#
+#   cd deploy && docker compose up
+#   → open http://localhost:3000, create admin, pick "hack-assistant"
+#
+# On a machine WITH an NVIDIA GPU, uncomment the `deploy.resources` block
+# under `ollama` to use it (much faster, and lets you run bigger models).
+
+services:
+  ollama:
+    build:
+      context: ../            # repo root (so COPY Modelfile works)
+      dockerfile: deploy/railway/Dockerfile
+    environment:
+      - PORT=11434
+      - BASE_MODEL=hf.co/bartowski/WhiteRabbitNeo-7B-v1.5a-GGUF:Q4_K_M
+    volumes:
+      - ollama:/root/.ollama
+    # GPU (NVIDIA + nvidia-container-toolkit):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=local-dev-secret
+    volumes:
+      - openwebui:/app/backend/data
+    depends_on:
+      - ollama
+
+volumes:
+  ollama:
+  openwebui:

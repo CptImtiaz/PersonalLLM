@@ -32,16 +32,20 @@ It's two Railway services in one project:
 - A Railway account with a plan that has enough RAM (7B needs ~6 GB; the
   free/Hobby tier is tight — Pro recommended).
 
+> **Tip:** test the whole stack on your own machine first with
+> `cd deploy && docker compose up`, then open http://localhost:3000. If it
+> works locally, Railway will behave the same.
+
 ## 1. Create the project
 1. Railway dashboard → **New Project** → **Empty Project**.
 2. Name it e.g. `personal-llm`.
 
 ## 2. Service A — Ollama (the model backend)
 1. In the project → **New** → **GitHub Repo** → pick `CptImtiaz/PersonalLLM`.
-2. Open the service → **Settings → Build**:
-   - Builder: **Dockerfile**
-   - Dockerfile Path: `deploy/railway/Dockerfile`
-   - Root Directory: `/`
+2. **Build is auto-configured.** The repo's root `railway.json` already sets
+   the Dockerfile builder, path (`deploy/railway/Dockerfile`), start command,
+   and the 600s healthcheck — so Railway detects it automatically. You do not
+   need to touch Build settings.
 3. **Settings → Variables**:
    - `PORT` = `11434`   (fixes the internal port so the UI can find it)
    - `BASE_MODEL` = `hf.co/bartowski/WhiteRabbitNeo-7B-v1.5a-GGUF:Q4_K_M`
@@ -67,10 +71,11 @@ Its private address is now: `http://<ollama-service-name>.railway.internal:11434
    set the target **port to `8080`** (Open WebUI listens on 8080).
 6. Deploy.
 
-> If the UI loads but shows no models, Service B can't reach Service A over
-> the private network (an IPv6 bind quirk). Quickest fix: give Service A a
-> public domain too and set `OLLAMA_BASE_URL` to that `https://...` URL
-> instead — but then protect it, since it's an uncensored model.
+> The Ollama service binds dual-stack (`[::]`) so Railway's private network
+> (IPv6) reaches it automatically — no extra setup. If the UI still shows no
+> models, double-check `OLLAMA_BASE_URL` uses Service A's exact name and port
+> `11434`. As a last resort, give Service A a public domain and point
+> `OLLAMA_BASE_URL` at that `https://...` URL — but then protect it.
 
 ## 4. First run
 1. Open Service B's public URL.

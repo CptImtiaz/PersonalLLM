@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 #
-# Railway entrypoint: start Ollama bound to $PORT, then pull the 7B model
-# and build the hack-assistant alias once (skipped if the volume already
-# has it). CPU-only on Railway — first boot downloads ~4.5 GB and can take
-# several minutes; give the service a generous healthcheck timeout.
+# Railway entrypoint: start Ollama, then pull the model and build the
+# hack-assistant alias once (skipped if the volume already has it).
+#
+# Binds to [::] (dual-stack) so Railway PRIVATE networking — which resolves
+# <service>.railway.internal over IPv6 — can reach it from the Open WebUI
+# service. CPU-only on Railway; first boot downloads the model.
 
 set -euo pipefail
 
 PORT="${PORT:-11434}"
-# Server listens on all interfaces so Railway can route to it.
-export OLLAMA_HOST="0.0.0.0:${PORT}"
-# Client commands connect over loopback.
-CLIENT="127.0.0.1:${PORT}"
+# Server listens on all IPv6 + IPv4 (dual-stack) so both the public proxy
+# and private networking can reach it.
+export OLLAMA_HOST="[::]:${PORT}"
+# Client/healthcheck talk over loopback by name.
+CLIENT="localhost:${PORT}"
 
 MODEL="${BASE_MODEL:-hf.co/bartowski/WhiteRabbitNeo-7B-v1.5a-GGUF:Q4_K_M}"
 ALIAS="hack-assistant"
@@ -40,6 +43,6 @@ else
   echo "[+] '${ALIAS}' ready."
 fi
 
-echo "[+] Serving. API: http://<your-railway-domain>/api  (model: ${ALIAS})"
+echo "[+] Serving model '${ALIAS}' on port ${PORT}."
 # Keep the container alive on the server process.
 wait "$SERVER_PID"
