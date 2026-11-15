@@ -32,16 +32,17 @@ curl -fsS "http://${CLIENT}/api/version" >/dev/null 2>&1 \
   || { echo "[x] Ollama did not start"; exit 1; }
 echo "[+] Ollama API is up."
 
-if OLLAMA_HOST="$CLIENT" ollama list 2>/dev/null | awk '{print $1}' | grep -q "^${ALIAS}"; then
-  echo "[+] '${ALIAS}' already present (volume cache). Skipping build."
-else
-  echo "[*] Pulling base model: ${MODEL} (first boot only) ..."
+# Pull the base model only if it isn't already cached on the volume.
+if ! OLLAMA_HOST="$CLIENT" ollama show "$MODEL" >/dev/null 2>&1; then
+  echo "[*] Pulling base model: ${MODEL} ..."
   OLLAMA_HOST="$CLIENT" ollama pull "$MODEL"
-  echo "[*] Building '${ALIAS}' from Modelfile ..."
-  sed "s|^FROM .*|FROM ${MODEL}|" /root/Modelfile > /tmp/Modelfile
-  OLLAMA_HOST="$CLIENT" ollama create "$ALIAS" -f /tmp/Modelfile
-  echo "[+] '${ALIAS}' ready."
 fi
+# ALWAYS (re)build the alias so Modelfile/template changes take effect on
+# every redeploy (the base stays cached, so this is fast).
+echo "[*] Building '${ALIAS}' from Modelfile ..."
+sed "s|^FROM .*|FROM ${MODEL}|" /root/Modelfile > /tmp/Modelfile
+OLLAMA_HOST="$CLIENT" ollama create "$ALIAS" -f /tmp/Modelfile
+echo "[+] '${ALIAS}' ready."
 
 echo "[+] Serving model '${ALIAS}' on port ${PORT}."
 # Keep the container alive on the server process.
